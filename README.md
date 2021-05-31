@@ -1,3 +1,3 @@
 # IUM - recommendation model
 
-Needs numpy, pandas, matplotlib
+Needs numpy, pandas, matplotlib, jsonlines
