@@ -1,9 +1,12 @@
 import argparse
 import numpy as np
-import jsonlines
 import matplotlib.pyplot as plt
 import pandas as pd
-from readData import getData
+import readData
 
 if __name__ == '__main__':
-    print(getData()[0])
+    sessionsData = readData.getData()[0]
+    userCount = readData.getUserCount()
+    productCount = readData.getProductCount()
+    matrix = np.zeros((userCount, productCount))
+    #trzeba zrobic inaczej ale musze konczyc, jednak latwiej bedzie wgrac baze uzytkownikow i produktow zeby wiedziec jakie maja id zeby latwiej zrobic macierz, jutro rano sie za to zabiore
