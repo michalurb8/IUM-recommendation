@@ -15,3 +15,8 @@ def getProductIds():
     with jsonlines.open('products.jsonl') as reader:
         data = [item["product_id"] for item in reader]
     return data
+
+def getProductCategoryData():
+    with jsonlines.open('products.jsonl') as reader:
+        data = [[item["product_id"], item["category_path"]] for item in reader]
+    return data
