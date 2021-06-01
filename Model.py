@@ -43,7 +43,7 @@ class Model:
 
     def _fit(self):
         self.model = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=10)
-        self.model._fit(self.matrix)
+        self.model.fit(self.matrix)
     
     def ask(self, product_id: int, k: int = 5):
         user = [self.matrix[self._getUserIndex(product_id), :]]
