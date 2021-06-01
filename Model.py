@@ -2,6 +2,9 @@ import readData
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
 
+BUY_WEIGHT = 1
+VIEW_WEIGHT = 0.1
+
 class Model:
     def __init__(self):
         self._getData()
@@ -38,7 +41,7 @@ class Model:
             product_index = self._getProductIndex(product_id)
             user_id = session[0]
             user_index = self._getUserIndex(user_id)
-            change = 1 if session[2] == "BUY_PRODUCT" else 0.1 #Viewing product contributes much less than buying
+            change = BUY_WEIGHT if session[2] == "BUY_PRODUCT" else VIEW_WEIGHT #Viewing product contributes much less than buying
             self.matrix[product_index][user_index] += change
 
     def _fit(self):
@@ -46,8 +49,8 @@ class Model:
         self.model.fit(self.matrix)
     
     def ask(self, product_id: int, k: int = 5):
-        user = [self.matrix[self._getUserIndex(product_id), :]]
-        result = self.model.kneighbors(user, n_neighbors=k+1) #calculate one more that needed
+        product = [self.matrix[self._getProductIndex(product_id), :]]
+        result = self.model.kneighbors(product, n_neighbors=k+1) #calculate one more that needed
         result = result[1][0]
-        result = [self.userIds[item] for item in result]
+        result = [self.productIds[item] for item in result]
         return result[1:] #product best matches itself, so exclude first one
