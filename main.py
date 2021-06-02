@@ -7,6 +7,6 @@ from NaiveModel import NaiveModel
 
 if __name__ == '__main__':
     m = Model()
-    print(m.ask(120))
+    print(m.ask(1012))
     n = NaiveModel()
     print(n.ask(1012))
