@@ -43,3 +43,8 @@ class NaiveModel:
             product_category = product[1]
             if product_category not in self.mppcDict: self.mppcDict[product_category] = []
             heappush(self.mppcDict[product_category], (product_id, product_popularity))
+
+    def ask(self, product_id: int, k: int = 5):
+        product_index = self._getProductIndex(product_id)
+        product_category = self.productsData[product_index][1]
+        return [ item[0] for item in nlargest(k, self.mppcDict[product_category], key = lambda x: x[1]) ]
