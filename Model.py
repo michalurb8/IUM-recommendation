@@ -2,8 +2,8 @@ import readData
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
 
-BUY_WEIGHT = 1
-VIEW_WEIGHT = 0.1
+BUY_WEIGHT = 200
+VIEW_WEIGHT = 1
 
 class Model:
     def __init__(self):

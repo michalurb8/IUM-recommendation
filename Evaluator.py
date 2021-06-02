@@ -1,6 +1,8 @@
 import readData
 from datetime import datetime
 
+K = 5
+
 class Evaluator:
     def __init__(self):
         self._getData()
@@ -18,13 +20,11 @@ class Evaluator:
 
     def evaluateModel(self, model) -> float:
         score = 0
-        iter10p = len(self.sessionsData[:15000])//10
-        for sessionNum, session in enumerate(self.sessionsData[:15000]): #for every VIEW session
-            if sessionNum%iter10p == 0:
-                print(sessionNum, "/", iter10p*10, 10*sessionNum//iter10p, "% DONE")
+        testSet = self.sessionsData[:1000]
+        for session in testSet: #for every VIEW session
             if session[2] == "BUY_PRODUCT": continue
-            recommended = model.ask(session[1]) #generate prediction for the product
+            recommended = model.ask(session[1], K) #generate prediction for the product
             for i, productId in enumerate(recommended): #for each recommended product with index i
                 if self._checkIfBought(session[0], productId, session[3]): #if product bought later 
-                    score += 1/(i+1) #score increases (first item recommended gets higher score than the next)
+                    score += 1/(i+5) #score increases (first item recommended gets higher score than the next)
         return score
