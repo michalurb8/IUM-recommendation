@@ -54,7 +54,10 @@ class MainModel(ModelInterface):
         dump(self.model, 'mainmodel.joblib')
 
     def fromFile(self):
-        self.model = load('mainmodel.joblib')
+        try:
+            self.model = load('mainmodel.joblib')
+        except:
+            raise Exception("No model file found")
     
     def ask(self, product_id: int, k: int = 5):
         if self.model == None:
