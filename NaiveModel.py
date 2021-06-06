@@ -1,17 +1,21 @@
 import numpy as np
 from ModelInterface import ModelInterface
 from heapq import heappush, nlargest
+import readData
 
 BUY_WEIGHT = 1
 VIEW_WEIGHT = 0.1
 
 class NaiveModel(ModelInterface):
-    def __init__(self, sessions, productIds, productsData):
-        self.sessionsData = sessions
-        self.productIds = productIds
-        self.productsData = productsData
+    def __init__(self):
+        self._getData()
         self._createProductPopularityList()
         self._createMPPCDict()
+
+    def _getData(self):
+        self.sessionsData = readData.getSessionData()
+        self.productIds = readData.getProductIds()
+        self.productsData = readData.getProductCategoryData()
 
     def _getProductIndex(self, productId: int) -> int:
         try:

@@ -1,17 +1,22 @@
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
 from ModelInterface import ModelInterface
+from joblib import dump, load
+import readData
 
 BUY_WEIGHT = 200
 VIEW_WEIGHT = 1
 
 class MainModel(ModelInterface):
-    def __init__(self, sessions, userIds, productIds):
-        self.sessionsData = sessions
-        self.userIds = userIds
-        self.productIds = productIds
+    def __init__(self):
+        self._getData()
         self._createMatrix()
-        self._fit()
+        self.model = None
+
+    def _getData(self):
+        self.sessionsData = readData.getSessionData()
+        self.userIds = readData.getUserIds()
+        self.productIds = readData.getProductIds()
 
     def _getUserIndex(self, userId: int) -> int:
         try:
@@ -41,13 +46,21 @@ class MainModel(ModelInterface):
             change = BUY_WEIGHT if session[2] == "BUY_PRODUCT" else VIEW_WEIGHT #Viewing product contributes much less than buying
             self.matrix[product_index][user_index] += change
 
-    def _fit(self):
+    def fit(self):
         self.model = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=10)
         self.model.fit(self.matrix)
     
+    def toFile(self):
+        dump(self.model, 'mainmodel.joblib')
+
+    def fromFile(self):
+        self.model = load('mainmodel.joblib')
+    
     def ask(self, product_id: int, k: int = 5):
+        if self.model == None:
+            raise Exception('Model must be fit first')
         product = [self.matrix[self._getProductIndex(product_id), :]]
-        result = self.model.kneighbors(product, n_neighbors=k+1) #calculate one more that needed
+        result = self.model.kneighbors(product, n_neighbors=k+1) #calculate one more than needed
         result = result[1][0]
         result = [self.productIds[item] for item in result]
         return result[1:] #product best matches itself, so exclude first one
