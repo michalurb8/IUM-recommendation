@@ -1,13 +1,15 @@
-import readData
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
+from ModelInterface import ModelInterface
 
 BUY_WEIGHT = 200
 VIEW_WEIGHT = 1
 
-class Model:
-    def __init__(self):
-        self._getData()
+class MainModel(ModelInterface):
+    def __init__(self, sessions, userIds, productIds):
+        self.sessionsData = sessions
+        self.userIds = userIds
+        self.productIds = productIds
         self._createMatrix()
         self._fit()
 
@@ -26,11 +28,6 @@ class Model:
             print("ERROR: Trying to use an ID of a nonexistent product: ", productId)
             return 0
         return index
-
-    def _getData(self):
-        self.sessionsData = readData.getSessionData()
-        self.userIds = readData.getUserIds()
-        self.productIds = readData.getProductIds()
 
     def _createMatrix(self):
         userCount = len(self.userIds)
