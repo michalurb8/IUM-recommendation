@@ -13,7 +13,7 @@ class NaiveModel(ModelInterface):
         self._createMPPCDict()
 
     def _getData(self):
-        self.sessionsData = readData.getSessionData()
+        self.sessionsData = readData.getTrainingSessions()
         self.productIds = readData.getProductIds()
         self.productsData = readData.getProductCategoryData()
 

@@ -4,7 +4,7 @@ from ModelInterface import ModelInterface
 from joblib import dump, load
 import readData
 
-BUY_WEIGHT = 200
+BUY_WEIGHT = 5
 VIEW_WEIGHT = 1
 
 class MainModel(ModelInterface):
@@ -14,7 +14,7 @@ class MainModel(ModelInterface):
         self.model = None
 
     def _getData(self):
-        self.sessionsData = readData.getSessionData()
+        self.sessionsData = readData.getTrainingSessions()
         self.userIds = readData.getUserIds()
         self.productIds = readData.getProductIds()
 
@@ -66,4 +66,4 @@ class MainModel(ModelInterface):
         result = self.model.kneighbors(product, n_neighbors=k+1) #calculate one more than needed
         result = result[1][0]
         result = [self.productIds[item] for item in result]
-        return result[1:] #product best matches itself, so exclude first one
+        return result[1:] #product best matches itself, so exclude the first one

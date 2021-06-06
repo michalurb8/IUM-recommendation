@@ -1,10 +1,18 @@
 import jsonlines
 from datetime import datetime
 
-def getSessionData():
+
+TEST_COUNT = 5000
+
+def getTrainingSessions():
     with jsonlines.open('data/sessions.jsonl') as reader:
-        data = [[item["user_id"], item["product_id"], item["event_type"], _strToDate(item["timestamp"])] for item in reader]
-    return data
+        data = [[item["user_id"], item["product_id"], item["event_type"], _strToDate(item["timestamp"]), item['session_id']] for item in reader]
+    return data[:-TEST_COUNT]
+
+def getTestSessions():
+    with jsonlines.open('data/sessions.jsonl') as reader:
+        data = [[item["user_id"], item["product_id"], item["event_type"], _strToDate(item["timestamp"]), item['session_id']] for item in reader]
+    return data[-TEST_COUNT:]
 
 def getUserIds():
     with jsonlines.open('data/users.jsonl') as reader:
